@@ -1,0 +1,29 @@
+.carousel-caption.middle-left {
+    position: absolute;
+    top: 50%;
+    left: 8%;
+    transform: translateY(-50%);
+    text-align: left;
+    
+    
+  }
+  .carousel-caption p{
+    font-size: 1.2rem;
+    color: #eee;
+    max-width: 500px;
+  }
+  .carousel-caption h2{
+    font-size: 3rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .carousel-item img {
+    height: 85vh;     
+    object-fit:cover;  
+  }
+  
+  .carousel-caption.middle-left h2,
+  .carousel-caption.middle-left p {
+    color: white;
+  }
+  
