@@ -5,12 +5,87 @@ const AuthModal = forwardRef((props, ref) => {
   const [open, setOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
 
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const [error, setError] = useState("");
 
   useImperativeHandle(ref, () => ({
     openModal() {
       setOpen(true);
     }
   }));
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  // --------------------------
+  // SIGNUP
+  // --------------------------
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    const res = await fetch("http://localhost:5000/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.error || "Signup failed");
+      return;
+    }
+
+    alert("Account created! Please log in.");
+    setIsLogin(true);
+  };
+
+  // --------------------------
+  // LOGIN
+  // --------------------------
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    const res = await fetch("http://localhost:5000/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: form.email,
+        password: form.password,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.error || "Login failed");
+      return;
+    }
+
+    // Save JWT + user info
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("role", data.role);
+    localStorage.setItem("name", data.name);
+
+    setOpen(false);
+
+    // Inform Navbar (parent) user logged in
+    if (props.onLogin) props.onLogin();
+
+    alert("Login successful");
+  };
 
   return (
     <>
@@ -21,13 +96,27 @@ const AuthModal = forwardRef((props, ref) => {
               {isLogin ? "Welcome Back" : "Create Account"}
             </h2>
 
+            {error && <p className="error-text">{error}</p>}
+
             {isLogin ? (
-              <form className="modal-form">
+              <form className="modal-form" onSubmit={handleLogin}>
                 <label>Email</label>
-                <input type="email" />
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                />
 
                 <label>Password</label>
-                <input type="password" />
+                <input
+                  type="password"
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                />
 
                 <button className="modal-submit">Login</button>
 
@@ -37,15 +126,33 @@ const AuthModal = forwardRef((props, ref) => {
                 </p>
               </form>
             ) : (
-              <form className="modal-form">
+              <form className="modal-form" onSubmit={handleSignup}>
                 <label>Name</label>
-                <input type="text" />
+                <input
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                />
 
                 <label>Email</label>
-                <input type="email" />
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                />
 
                 <label>Password</label>
-                <input type="password" />
+                <input
+                  type="password"
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                />
 
                 <button className="modal-submit">Register</button>
 

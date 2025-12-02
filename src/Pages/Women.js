@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import wbanner from '../Assets/wbanner.jpg';
 import airmax from '../Assets/airmax.png';
 import wtech from '../Assets/womentech.jpg';
 import wrun from '../Assets/wrunning.jpg';
+import "../Styles/Men.css"; 
+
+// Trending images
 import pegasus from '../Assets/pegasus.png';
 import wdrifit from '../Assets/wdrifit.jpg';
 import bliss from '../Assets/bliss.jpg';
@@ -10,85 +13,59 @@ import wleg from '../Assets/wleggings.jpg';
 import wshort from '../Assets/wshorts.jpg';
 import whair from '../Assets/whair.jpg';
 import wblazer from '../Assets/wblazer.jpg';
-import "../Styles/Men.css"; 
 
 const Women = () => {
+  const [products, setProducts] = useState([]);
   const [visibleCount, setVisibleCount] = useState(4);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
- 
   const bannerImg = wbanner;
   const shoeImg = airmax;
   const hoodieImg = wtech;
   const runningImg = wrun;
 
- 
-  const products = [      //static products
-    {
-      name: "Nike Air Zoom Pegasus",
-      category: "Running Shoes",
-      price: "$160",
-      image: pegasus,
-    },
-    {
-      name: "Women's Tech Fleece Hoodie",
-      category: "Hoodies & Jackets",
-      price: "$120",
-      image: wtech,
-    },
-    {
-      name: "Dri-FIT Running Tee",
-      category: "Training Clothing",
-      price: "$45",
-      image: wdrifit,
-    },
-    {
-      name: "Air Max Bliss",
-      category: "Lifestyle Shoes",
-      price: "$95",
-      image: bliss,
-    },
-    {
-      name: "Sportswear Essential Leggings",
-      category: "Lifestyle Clothing",
-      price: "$55",
-      image: wleg,
-    },
-    
-    {
-      name: "Sportswear Essential Shorts",
-      category: "Shorts",
-      price: "$45",
-      image: wshort,
-    },
-    
-    {
-      name: "Nike Women's Headband",
-      category: "Women's Accessories",
-      price: "$30",
-      image: whair,
-    },
-    {
-      name: "Nike Women's Blazer Mid 77 Vintage",
-      category: "Shoes",
-      price: "$120",
-      image: wblazer,
-    }
-        
-  ];
+  // Fetch products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+
+        const res = await fetch("http://localhost:5000/api/products?section=women");
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch products");
+        }
+
+        const data = await res.json();
+        setProducts(data);
+
+      } catch (err) {
+        console.error(err);
+        setError("Could not load products");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 4);
+    setVisibleCount(prev => prev + 4);
   };
 
   return (
     <>
       <main className="container">
-        
+
+        {/* PAGE HEADER */}
         <header className="page-header">
           <h1>Women's Collection</h1>
           <p>Designed for confidence, comfort, and performance.</p>
         </header>
 
+        {/* FEATURED BANNER */}
         <div className="featured-banner">
           <img src={bannerImg} alt="Women's Banner" />
           <div className="featured-banner-content">
@@ -98,8 +75,10 @@ const Women = () => {
           </div>
         </div>
 
+        {/* TRENDING SECTION */}
         <section className="trending-section">
           <h2 className="section-heading">Trending for Women</h2>
+
           <div className="trending-grid">
             <div className="trending-item">
               <img src={shoeImg} alt="" />
@@ -130,31 +109,41 @@ const Women = () => {
           </div>
         </section>
 
+        {/* PRODUCT GRID (DYNAMIC) */}
         <section>
           <h2 className="section-heading">Shop The Essentials</h2>
-          <div className="product-grid">
-            {products.slice(0, visibleCount).map((product, i) => (
-              <div className="product-card" key={i}>
-                <img src={product.image} alt="" />
-                <div className="product-info">
-                  <h3>{product.name}</h3>
-                  <p className="category">{product.category}</p>
-                  <p className="price">{product.price}</p>
-                </div>
-              </div>
-            ))}
-          </div>
 
-          {visibleCount < products.length && (
-            <div className="load-more-container">
-              <button className="load-more-button" onClick={handleLoadMore}>
-                Load More
-              </button>
-            </div>
+          {loading && <p>Loading products...</p>}
+          {error && <p style={{ color: "red" }}>{error}</p>}
+
+          {!loading && !error && (
+            <>
+              <div className="product-grid">
+                {products.slice(0, visibleCount).map((product) => (
+                  <div className="product-card" key={product.id}>
+                    <img src={product.image_url} alt={product.name} />
+
+                    <div className="product-info">
+                      <h3>{product.name}</h3>
+                      <p className="category">{product.category}</p>
+                      <p className="price">${Number(product.price).toFixed(2)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {visibleCount < products.length && (
+                <div className="load-more-container">
+                  <button className="load-more-button" onClick={handleLoadMore}>
+                    Load More
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </section>
-      </main>
 
+      </main>
     </>
   );
 };
