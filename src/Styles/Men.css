@@ -352,6 +352,19 @@
       background: #111;
       color: white;
     }
+
+    .active-filter {
+      background: #111 !important;
+      color: white !important;
+      border-color: #111 !important;
+      font-weight: bold;
+      transform: translateY(-2px);
+    }
+    
+    .filter-bar button {
+      transition: all 0.2s ease;
+    }
+    
     
 
     

@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useContext } from "react";
+import { CartContext } from "../Context/CartContext";
+import { useNavigate } from "react-router-dom";
 import "../Styles/Men.css";
 
 import Unleash from "../Assets/Poster.jpg";
@@ -11,6 +14,9 @@ const Men = () => {
   const [visibleCount, setVisibleCount] = useState(4);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
+
 
   // FILTER STATE
   const [filter, setFilter] = useState("all");
@@ -46,12 +52,29 @@ const Men = () => {
   };
 
   // FILTERED PRODUCTS LOGIC
-  const filteredProducts =
-    filter === "all"
-      ? products
-      : products.filter(
-          (p) => p.category.toLowerCase() === filter.toLowerCase()
-        );
+  const filteredProducts = products.filter((p) => {
+    if (filter === "all") return true;
+    const cat = (p.category || "").toLowerCase();
+
+    if (filter === "Shoes") {
+      return cat.includes("shoes");
+    }
+    if (filter === "Clothing") {
+      return (
+        cat.includes("clothing") ||
+        cat.includes("hoodies") ||
+        cat.includes("jackets") ||
+        cat.includes("shorts") ||
+        cat.includes("fleece") ||
+        cat.includes("shirts")
+      );
+    }
+    if (filter === "Accessories") {
+      return cat.includes("accessories");
+    }
+
+    return true;
+  });
 
   return (
     <>
@@ -113,11 +136,36 @@ const Men = () => {
 
           {/* FILTER BAR */}
           <div className="filter-bar">
-            <button onClick={() => setFilter("all")}>All</button>
-            <button onClick={() => setFilter("Shoes")}>Shoes</button>
-            <button onClick={() => setFilter("Clothing")}>Clothing</button>
-            <button onClick={() => setFilter("Accessories")}>Accessories</button>
-          </div>
+
+      <button 
+       className={filter === "all" ? "active-filter" : ""}
+         onClick={() => setFilter("all")}>
+  
+          All
+        </button>
+
+  <button 
+    className={filter === "Shoes" ? "active-filter" : ""}
+    onClick={() => setFilter("Shoes")}>
+  
+    Shoes
+       </button>
+
+  <button 
+    className={filter === "Clothing" ? "active-filter" : ""}
+    onClick={() => setFilter("Clothing")}>
+  
+    Clothing
+       </button>
+
+  <button 
+    className={filter === "Accessories" ? "active-filter" : ""}
+    onClick={() => setFilter("Accessories")}>
+  
+    Accessories
+   </button>
+</div>
+
 
           {loading && <p>Loading products...</p>}
           {error && <p style={{ color: "red" }}>{error}</p>}
@@ -126,14 +174,23 @@ const Men = () => {
             <>
               <div className="product-grid">
                 {filteredProducts.slice(0, visibleCount).map((product) => (
-                  <div className="product-card" key={product.id}>
+                  <div className="product-card" key={product.id} onClick={() => navigate(`/product/${product.id}`)}style={{ cursor: "pointer" }}>
                     <img src={product.image_url} alt={product.name} />
 
                     <div className="product-info">
                       <h3>{product.name}</h3>
                       <p className="category">{product.category}</p>
                       <p className="price">${Number(product.price).toFixed(2)}</p>
-                      <button className="add-button">Add to cart</button>
+                      <button 
+                                      className="add-button"
+                                   onClick={() => {
+                                    console.log("Product added:", product);
+                                    addToCart(product);
+                                   }}>
+
+                                    Add to cart
+                                              </button>
+
                     </div>
                   </div>
                 ))}

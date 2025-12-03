@@ -51,15 +51,19 @@ app.get("/api/admin-protected", verifyToken, (req, res) => {
     res.json({ message: "Valid admin" });
   });
   
-// GET all products
+// GET products (all, by section, or by ID)
 app.get('/api/products', async (req, res) => {
-  const { section } = req.query;
+  const { section, id } = req.query;
 
   try {
     let query = 'SELECT * FROM products';
     let params = [];
 
-    if (section) {
+    if (id) {
+      query += ' WHERE id = ?';
+      params.push(id);
+    } 
+    else if (section) {
       query += ' WHERE section = ?';
       params.push(section);
     }
@@ -72,6 +76,7 @@ app.get('/api/products', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch products' });
   }
 });
+
 
 // SEARCH route
 app.get("/api/search", async (req, res) => {

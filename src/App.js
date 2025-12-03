@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { CartProvider } from "./Context/CartContext";
 import Men from './Pages/Men.js';
 import Women from './Pages/Women.js';
 import Kids from './Pages/Kids.js';
@@ -10,6 +11,12 @@ import Footer from './Components/Footer.js';
 import Admin from "./Pages/Admin";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import SearchResults from "./Pages/SearchResults";
+import Cart from "./Pages/Cart";
+import Checkout from "./Pages/Checkout";
+import ProductDetails from "./Pages/ProductDetails";
+
+
+
 
 
 import './Styles/Navbar.css'
@@ -17,6 +24,7 @@ import './Styles/Navbar.css'
 function App() {
   return (
     <div>
+      <CartProvider>
       <Router>
         <Navbar />
         <Routes>
@@ -25,7 +33,10 @@ function App() {
           <Route path='/Women' element={<Women />} />
           <Route path='/Kids' element={<Kids />} />
           <Route path='/Contact' element={<Contact />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/search" element={<SearchResults />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
 
           {/* Protected Admin Route */}
           <Route
@@ -39,6 +50,7 @@ function App() {
         </Routes>
       </Router>
       <Footer />
+      </CartProvider> 
     </div>
   );
 }
