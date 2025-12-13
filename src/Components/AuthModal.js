@@ -1,6 +1,8 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import "../Styles/AuthModal.css";
 import { useAuth } from "../Context/AuthContext";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 
 
 const AuthModal = forwardRef((props, ref) => {
@@ -34,7 +36,7 @@ const AuthModal = forwardRef((props, ref) => {
     e.preventDefault();
     setError("");
 
-    const res = await fetch("http://localhost:5000/api/signup", {
+    const res = await fetch(`${API_URL}/api/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -62,7 +64,7 @@ const AuthModal = forwardRef((props, ref) => {
     e.preventDefault();
     setError("");
 
-    const res = await fetch("http://localhost:5000/api/login", {
+    const res = await fetch(`${API_URL}/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

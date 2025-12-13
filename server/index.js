@@ -34,7 +34,14 @@ const verifyToken = (req, res, next) => {
   
 
 // Middleware
-app.use(cors({ origin: 'http://localhost:3000' })); // Vite dev server
+app.use(cors({
+  origin: [
+    "http://localhost:3000",
+    "https://nike-clone-beta-weld.vercel.app"
+  ],
+  credentials: true
+}));
+
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 app.use("/api/orders", orderRoutes);
@@ -172,9 +179,10 @@ app.post("/api/upload", upload.single("image"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
   }
+  const baseUrl = process.env.BASE_URL || "http://localhost:5000";
 
   res.json({
-    imageUrl: `http://localhost:5000/uploads/${req.file.filename}`,
+    imageUrl: `${baseUrl}/uploads/${req.file.filename}`,
   });
 });
 

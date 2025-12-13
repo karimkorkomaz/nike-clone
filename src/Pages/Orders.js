@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/Orders.css";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -12,7 +14,7 @@ const Orders = () => {
       if (!user) return;
 
       const response = await fetch(
-        `http://localhost:5000/api/orders/user/${user.id}`,
+        `${API_URL}/api/orders/user/${user.id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

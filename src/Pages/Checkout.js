@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 import { CartContext } from "../Context/CartContext";
 import { useNavigate } from "react-router-dom";
 import "../Styles/Checkout.css";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 
 const Checkout = () => {
   const { cart, clearCart } = useContext(CartContext);
@@ -30,7 +32,7 @@ const Checkout = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:5000/api/orders", {
+      const response = await fetch(`${API_URL}/api/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

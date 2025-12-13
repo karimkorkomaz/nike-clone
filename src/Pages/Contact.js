@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "../Styles/Contact.css";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 
 const ContactNike = () => {
   const [name, setName] = useState("");
@@ -20,7 +22,7 @@ const ContactNike = () => {
     setSending(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/contact", {
+      const res = await fetch(`${API_URL}/api/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, message }),

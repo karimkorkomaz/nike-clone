@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/Admin.css";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 
 const Admin = () => {
   const [products, setProducts] = useState([]);
@@ -22,7 +24,7 @@ const Admin = () => {
   // ==========================
   const fetchProducts = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/products");
+      const res = await fetch(`${API_URL}/api/products`);
       const data = await res.json();
       setProducts(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -37,7 +39,7 @@ const Admin = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:5000/api/orders/all", {
+      const res = await fetch(`${API_URL}/api/orders/all`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -62,7 +64,7 @@ const Admin = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:5000/api/messages", {
+      const res = await fetch(`${API_URL}/api/messages`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -104,7 +106,7 @@ const Admin = () => {
 
     setUploading(true);
 
-    const res = await fetch("http://localhost:5000/api/upload", {
+    const res = await fetch(`${API_URL}/api/upload`, {
       method: "POST",
       body: formData,
     });
@@ -126,7 +128,7 @@ const Admin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5000/api/products", {
+    const res = await fetch(`${API_URL}/api/products`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -148,7 +150,7 @@ const Admin = () => {
   const deleteProduct = async (id) => {
     if (!window.confirm("Delete this product?")) return;
 
-    const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+    const res = await fetch(`${API_URL}/api/products/${id}`, {
       method: "DELETE",
     });
 
@@ -164,7 +166,7 @@ const Admin = () => {
 
     const token = localStorage.getItem("token");
 
-    const res = await fetch(`http://localhost:5000/api/messages/${id}`, {
+    const res = await fetch(`${API_URL}/api/messages/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });

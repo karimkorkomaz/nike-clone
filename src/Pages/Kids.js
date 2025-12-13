@@ -8,6 +8,8 @@ import ktech from "../Assets/ktech.jpg";
 import kdrifit from "../Assets/kdrifit.jpg";
 
 import "../Styles/Men.css";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 
 const Kids = () => {
   const [products, setProducts] = useState([]);
@@ -30,7 +32,7 @@ const Kids = () => {
         setLoading(true);
 
         const res = await fetch(
-          "http://localhost:5000/api/products?section=kids"
+          `${API_URL}/api/products?section=kids`
         );
 
         if (!res.ok) throw new Error("Failed to fetch products");

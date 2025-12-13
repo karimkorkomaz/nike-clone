@@ -8,6 +8,8 @@ import Unleash from "../Assets/Poster.jpg";
 import Airmax from "../Assets/airmax.png";
 import Tech from "../Assets/tech.jpg";
 import Run from "../Assets/running.jpg";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 
 const Men = () => {
   const [products, setProducts] = useState([]);
@@ -27,7 +29,7 @@ const Men = () => {
       try {
         setLoading(true);
 
-        const res = await fetch("http://localhost:5000/api/products?section=men");
+        const res = await fetch(`${API_URL}/api/products?section=men`);
 
         if (!res.ok) {
           throw new Error("Failed to fetch products");

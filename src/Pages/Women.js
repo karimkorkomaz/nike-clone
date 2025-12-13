@@ -7,6 +7,8 @@ import airmax from "../Assets/airmax.png";
 import wtech from "../Assets/womentech.jpg";
 import wrun from "../Assets/wrunning.jpg";
 import "../Styles/Men.css";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 
 const Women = () => {
   const [products, setProducts] = useState([]);
@@ -25,7 +27,7 @@ const Women = () => {
         setLoading(true);
 
         const res = await fetch(
-          "http://localhost:5000/api/products?section=women"
+          `${API_URL}/api/products?section=women`
         );
 
         if (!res.ok) {

@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { CartContext } from "../Context/CartContext";
 import "../Styles/ProductDetails.css";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -12,7 +14,7 @@ const ProductDetails = () => {
   const [color, setColor] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/products?id=${id}`)
+    fetch(`${API_URL}/api/products?id=${id}`)
       .then(res => res.json())
       .then(data => setProduct(data[0]))
       .catch(err => console.error(err));

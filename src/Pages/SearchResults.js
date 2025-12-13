@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import "../Styles/Search.css";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -14,7 +16,7 @@ const SearchResults = () => {
   useEffect(() => {
     const fetchResults = async () => {
       setLoading(true);
-      const res = await fetch(`http://localhost:5000/api/search?q=${query}`);
+      const res = await fetch(`${API_URL}/api/search?q=${query}`);
       const data = await res.json();
       setResults(data);
       setLoading(false);
