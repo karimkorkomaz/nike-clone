@@ -37,7 +37,9 @@ const verifyToken = (req, res, next) => {
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    "https://nike-clone-beta-weld.vercel.app"
+    "https://nike-clone-beta-weld.vercel.app",
+    "https://nike-clone-rmj0c3j14-karim-korkomazs-projects.vercel.app",
+    "https://nike-clone-m839.onrender.com",
   ],
   credentials: true
 }));
