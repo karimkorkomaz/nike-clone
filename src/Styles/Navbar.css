@@ -138,7 +138,7 @@ button {
 /* Hide search bar fully on mobile */
 @media (max-width: 960px) {
     .search-container {
-        
+        width: 100px;
     }
 }
 
